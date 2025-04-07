@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Environment Dashboard</title>
+    <style>
+        :root {
+            --online: #4CAF50;
+            --offline: #F44336;
+            --warning: #FFC107;
+            --primary: #2196F3;
+            --text: #333;
+            --bg: #f5f7fa;
+            --card-bg: #fff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+        }
+        
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .sensor-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .sensor-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .sensor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .sensor-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .online {
+            background-color: var(--online);
+        }
+        
+        .offline {
+            background-color: var(--offline);
+        }
+        
+        .warning {
+            background-color: var(--warning);
+        }
+        
+        .sensor-value {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .sensor-unit {
+            font-size: 0.9em;
+            color: #666;
+            margin-left: 5px;
+        }
+        
+        .sensor-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .last-updated {
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .sensor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>IoT Environment Dashboard</h1>
+            <p class="subtitle">Real-time monitoring of environmental conditions</p>
+        </header>
+        
+        <div class="sensor-grid">
+            <!-- Brightness Sensor -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-title">Brightness Level</div>
+                    <div class="status">
+                        <div class="status-indicator online"></div>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="sensor-value">-- <span class="sensor-unit">lux</span></div>
+                <div class="sensor-details">
+                    <span>Optimal: 300-500 lux</span>
+                    <span class="last-updated">Updated: --</span>
+                </div>
+            </div>
+            
+            <!-- Temperature Sensor -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-title">Temperature</div>
+                    <div class="status">
+                        <div class="status-indicator online"></div>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="sensor-value">-- <span class="sensor-unit">°C</span></div>
+                <div class="sensor-details">
+                    <span>Range: 18-24°C</span>
+                    <span class="last-updated">Updated: --</span>
+                </div>
+            </div>
+            
+            <!-- Availability Monitor -->
+            <div class="sensor-card">
+                <div class="sensor-header">
+                    <div class="sensor-title">System Availability</div>
+                    <div class="status">
+                        <div class="status-indicator online"></div>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="sensor-value">100<span class="sensor-unit">%</span></div>
+                <div class="sensor-details">
+                    <span>Uptime: 99.9%</span>
+                    <span class="last-updated">Updated: Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for demonstration - replace with real MQTT implementation
+        const sensors = {
+            brightness: {
+                value: null,
+                unit: 'lux',
+                optimal: '300-500 lux',
+                status: 'online'
+            },
+            temperature: {
+                value: null,
+                unit: '°C',
+                range: '18-24°C',
+                status: 'online'
+            },
+            availability: {
+                value: 100,
+                unit: '%',
+                uptime: '99.9%',
+                status: 'online'
+            }
+        };
+
+        // Function to update sensor display
+        function updateSensorDisplay() {
+            // Brightness
+            document.querySelector('.sensor-card:nth-child(1) .sensor-value').textContent = 
+                sensors.brightness.value !== null ? sensors.brightness.value : '--';
+            document.querySelector('.sensor-card:nth-child(1) .status-indicator').className = 
+                `status-indicator ${sensors.brightness.status}`;
+            
+            // Temperature
+            document.querySelector('.sensor-card:nth-child(2) .sensor-value').textContent = 
+                sensors.temperature.value !== null ? sensors.temperature.value : '--';
+            document.querySelector('.sensor-card:nth-child(2) .status-indicator').className = 
+                `status-indicator ${sensors.temperature.status}`;
+            
+            // Availability
+            document.querySelector('.sensor-card:nth-child(3) .sensor-value').textContent = 
+                sensors.availability.value;
+        }
+
+        // Initialize
+        updateSensorDisplay();
+
+        // Simulate data updates (replace with MQTT event listeners)
+        setInterval(() => {
+            // Mock data changes
+            sensors.brightness.value = Math.floor(Math.random() * 1000);
+            sensors.temperature.value = (Math.random() * 10 + 18).toFixed(1);
+            
+            updateSensorDisplay();
+            
+            // Update timestamps
+            const now = new Date();
+            document.querySelectorAll('.last-updated').forEach(el => {
+                el.textContent = `Updated: ${now.toLocaleTimeString()}`;
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
